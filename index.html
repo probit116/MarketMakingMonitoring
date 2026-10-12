@@ -2607,10 +2607,16 @@
       <li><span class="spec-term">创建/编辑时间</span>：这条监控最近一次被改动的时间。会刷新这个时间的操作有：新建、编辑后保存、启用、停用。只是打开看一眼不会刷新。格式：2026-10-10 10:38:22。</li>
       <li><span class="spec-term">最新启用时间</span>：这条监控最近一次成功启用的时间。如果当前是待启用，或者从来没启用过，就显示 <b>--</b>。</li>
       <li><span class="spec-term">最新统计时间</span>：这条监控最近一次用来做统计计算的那笔成交的时间。也就是统计口径里的「结束时间」。只有运行中的监控才会有值；待启用的监控显示 <b>--</b>。</li>
-      <li><span class="spec-term">统计时间间隔</span>：每当这笔监控的币对有一笔新的主动成交，就把这笔成交的时间当作「结束时间」，往前推 N 分钟（N 就是填的统计时间间隔）当作「开始时间」。把开始到结束这段时间里，同一个主动成交方向的成交额加起来，看是否大于等于这个方向填的阈值。买入和卖出各算各的，互不影响。</li>
+      <li><span class="spec-term">统计时间间隔（怎么算）</span>：分三步理解：<br>
+        <b>第一步，定结束时间：</b>每当这笔监控的币对有一笔新的主动成交，就把这笔成交的时间当作「结束时间」。<br>
+        <b>第二步，定开始时间（两种情况）：</b><br>
+        　· 情况一：如果「结束时间」距离<b>上一次报警通知时间</b>还不到 N 分钟（N 就是填的统计时间间隔），那么「开始时间」就用上一次报警通知时间。<br>
+        　· 情况二：如果「结束时间」距离上一次报警通知时间已经超过 N 分钟了，那么「开始时间」= 结束时间往前推 N 分钟。<br>
+        <b>第三步，算成交额并判断：</b>把开始到结束这段时间里，同一个方向的成交额全部加起来，看是否大于等于这个方向填的阈值。达到阈值就触发报警。<br>
+        <b>买入和卖出各算各的</b>，互不影响。</li>
       <li><span class="spec-term">买入 / 卖出阈值列</span>：这一列分两行显示，第一行是买入方向，第二行是卖出方向。每行格式是「交易类型：金额」，比如「被动买入：120,000.00」「主动卖出：100,000.00」。交易类型来自配置表单里选的下拉框（全部交易 / 主动买入 / 被动买入 / 主动卖出 / 被动卖出）。买入用绿色，卖出用红色。</li>
       <li><span class="spec-term">币对占用互斥</span>：同一个市场的同一个币对，同一时间只能被一条监控占用。比如「合约 BTCUSDT」已经被 S-003 占用着，其他监控就不能再选这个币对去启用。</li>
-      <li><span class="spec-term">点「启用」</span>：先检查这个币对有没有被别的监控占着。如果占着了，弹红条提示「<b>启动失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」（比如：启动失败，原因是：合约 BTCUSDT 币对已在 S-003 · BTC 冲击监控 运营中），状态保持不变。如果没被占，状态变成运行中，更新最新启用时间和创建/编辑时间。</li>
+      <li><span class="spec-term">点「启用」</span>：先检查这个币对有没有被别的监控占着。如果占着了，弹红条提示，红条上的文字是：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>（格式：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控）。状态保持不变。如果没被占，状态变成运行中，更新最新启用时间和创建/编辑时间。</li>
       <li><span class="spec-term">点「停用」</span>：不做任何检查，直接释放币对占用，状态变成待启用，最新启用时间变回 <b>--</b>。</li>
       <li><span class="spec-term">点「编辑」</span>：跳转到「新建监控 / 编辑配置表单」页面，把这条监控的配置带过去修改。</li>
     </ol>
@@ -2619,7 +2625,13 @@
   <div class="spec-card" id="specCFG" style="display:none;margin-top:14px;">
     <strong style="color:#eef5ff;">📝 新建监控 / 编辑配置表单（页级独立口径）</strong>
     <ol style="margin:8px 0 0 0;padding-left:20px;line-height:2;">
-      <li><span class="spec-term">统计时间间隔怎么算</span>：每当有一笔新成交，就把这笔成交的时间当作「结束时间」，往前推 N 分钟（N 就是填的统计时间间隔）当作「开始时间」。把开始到结束这段时间里，同一个方向的成交额全部加起来。买入和卖出各算各的，互不影响。</li>
+      <li><span class="spec-term">统计时间间隔怎么算</span>：分三步理解：<br>
+        <b>第一步，定结束时间：</b>每当有一笔新成交，就把这笔成交的时间当作「结束时间」。<br>
+        <b>第二步，定开始时间（两种情况）：</b><br>
+        　· 情况一：如果「结束时间」距离<b>上一次报警通知时间</b>还不到 N 分钟（N 就是填的统计时间间隔），那么「开始时间」就用上一次报警通知时间。<br>
+        　· 情况二：如果「结束时间」距离上一次报警通知时间已经超过 N 分钟了，那么「开始时间」= 结束时间往前推 N 分钟。<br>
+        <b>第三步，算成交额：</b>把开始到结束这段时间里，同一个方向的成交额全部加起来。<br>
+        <b>买入和卖出各算各的</b>，互不影响。</li>
       <li><span class="spec-term">统计时间间隔怎么填</span>：只能填整数分钟，不能填小数、不能填负数。输入时字母和符号会自动被清掉。如果填 0 或空着就回车，会清空并提示「统计时间请输入 ≥1 的整数分钟」。</li>
       <li><span class="spec-term">买入阈值 / 卖出阈值</span>：买入和卖出各有一个「交易类型」下拉框，决定统计哪种成交：全部交易、主动买入/卖出（默认）、被动买入/卖出。主动买入就是买方主动吃掉卖方挂的单；被动买入就是买方挂单被卖方主动吃掉；主动/被动卖出同理。选「全部交易」就是同方向的主动和被动都加在一起。当所选交易类型的累计成交额达到这个方向填的阈值，就触发这个方向的告警。买入和卖出各有各的阈值和交易类型，各自独立触发。</li>
       <li><span class="spec-term">监控账号 UID 怎么填</span>：只能填数字，填字母会被自动清掉。按回车添加一个 UID。如果这个 UID 已经加过了，不会重复加，并提示「该 UID 已存在」。空着回车不会添加。</li>
@@ -2629,8 +2641,8 @@
       <li><span class="spec-term">邮件收件人怎么填</span>：必须是合法的邮箱格式，格式不对不会添加，并提示「请输入正确的邮箱地址」。同一个邮箱不会重复添加。</li>
       <li><span class="spec-term">币对下拉里有些选项选不了</span>：被正在运行的监控占用的币对，在下拉里是灰色的不能选，鼠标悬停会显示「已被运行中监控占用：监控编号 · 监控名」。没被占用的币对可以正常选。启用或停用某个监控后，下拉里的可选状态会跟着更新。</li>
       <li><span class="spec-term">启用/停用配置</span>：这一项决定保存后这条监控是运行中还是待启用。有两个单选：「启用（运行中）」和「停用（待启用）」。默认两个都不选，留空表示不指定。选了「启用」，保存后监控列表里这条的状态就是运行中；选了「停用」，保存后状态是待启用。如果留空不选，保存时不做状态判断，由保存逻辑决定默认状态。</li>
-      <li><span class="spec-term">点「保存」</span>：所有必填字段都必须填，少填一个就不能保存，会弹红条告诉你哪个没填。启用/停用配置不是必填项，可以留空。全部填对了之后，生成一个新的监控编号（比如 S-006），插到监控列表的最上面，然后自动跳回监控列表页，弹绿条提示「新建监控保存成功」。</li>
-      <li><span class="spec-term">保存时选的币对被占了</span>：保存时会检查一遍所有选中的币对有没有被别的正在运行的监控占用。如果有，弹红条提示「<b>保存失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」（比如：保存失败，原因是：合约 BTCUSDT 币对已在 S-003 · BTC 冲击监控 运营中），页面不关闭，也不保存。</li>
+      <li><span class="spec-term">点「保存」</span>：所有必填字段都必须填，少填一个就不能保存，会弹红条提示，红条上的文字是：<b>「请填写必填字段：{字段名}」</b>（比如：请填写必填字段：买入阈值）。启用/停用配置不是必填项，可以留空。全部填对了之后，生成一个新的监控编号（比如 S-006），插到监控列表的最上面，然后自动跳回监控列表页，弹绿条提示「新建监控保存成功」。</li>
+      <li><span class="spec-term">保存时选的币对被占了</span>：保存时会检查一遍所有选中的币对有没有被别的正在运行的监控占用。如果有，弹红条提示，红条上的文字是：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>（格式：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控），页面不关闭，也不保存。</li>
     </ol>
   </div>
 
@@ -2679,7 +2691,13 @@
                   <li><span class="spec-term">市场类型</span>：每条币对自带市场类型，要么是现货，要么是合约，在币对名称里直接写出来（比如「现货 BTCUSDT」「合约 BTCUSDT」）。页面上不单独提供市场类型筛选项，避免和币对筛选重复引起误解。</li>
                   <li><span class="spec-term">现货币对 / 合约币对</span>：每条监控自己维护一份币对清单。现货的币对显示成「现货 BTCUSDT」，合约的显示成「合约 BTCUSDT」。现货用蓝色标记，合约用橙色标记。</li>
                   <li><span class="spec-term">监控列表</span>：每一行就是一条监控，由「市场 + 币对 + 监控名」共同确定。每行有三个按钮：启用/停用、编辑。新建监控走单独的配置表单页。</li>
-                  <li><span class="spec-term">统计时间间隔</span>：每当有新成交，就以这笔成交的时间为终点，往前推 N 分钟（N 就是填的统计时间间隔）作为起点。把起点到终点之间、同一个方向的成交额全部加起来。买入和卖出各算各的。同一个方向在同一个统计区间内只会告警一次。</li>
+                  <li><span class="spec-term">统计时间间隔</span>：分三步理解：<br>
+                    　<b>第一步，定结束时间：</b>每当有新成交，就以这笔成交的时间作为「结束时间」。<br>
+                    　<b>第二步，定开始时间（两种情况）：</b><br>
+                    　　· 情况一：如果「结束时间」距离<b>上一次报警通知时间</b>还不到 N 分钟（N 就是填的统计时间间隔），那么「开始时间」就用上一次报警通知时间。<br>
+                    　　· 情况二：如果「结束时间」距离上一次报警通知时间已经超过 N 分钟了，那么「开始时间」= 结束时间往前推 N 分钟。<br>
+                    　<b>第三步，算成交额：</b>把开始到结束这段时间里，同一个方向的成交额全部加起来。<br>
+                    　买入和卖出各算各的，互不影响。同一个方向在同一个统计区间内只会告警一次。</li>
                   <li><span class="spec-term">交易类型</span>：买入和卖出各有一个「交易类型」下拉框，用来决定统计哪种成交。买入方向可选：全部交易、主动买入（默认）、被动买入；卖出方向可选：全部交易、主动卖出（默认）、被动卖出。主动买入就是买方主动吃掉卖方挂的单；被动买入就是买方挂单被卖方主动吃掉；主动/被动卖出同理。选「全部交易」就是同方向的主动和被动都加在一起统计。</li>
                   <li><span class="spec-term">买入阈值</span>：按上面选的交易类型，把买入方向的累计成交额加起来，达到这个数就触发告警。成交额 = 成交价格 × 成交数量，单位是 USDT。</li>
                   <li><span class="spec-term">卖出阈值</span>：按上面选的交易类型，把卖出方向的累计成交额加起来，达到这个数就触发告警。成交额 = 成交价格 × 成交数量，单位是 USDT。</li>
@@ -2717,9 +2735,9 @@
                 <ol>
                   <li><span class="spec-term">统计时间间隔怎么填</span>：只能填整数分钟，不能切换成小时或天。所有需要填统计时间的地方都一样。填 0 或空着回车，会清空并提示「统计时间请输入 ≥1 的整数分钟」。</li>
                   <li><span class="spec-term">报错提示长什么样</span>：红色的提示条，出现在页面顶部中间，过一会自动消失。同一个错误不会连弹好几次。</li>
-                  <li><span class="spec-term">币对被占了报什么错</span>：启用时提示「<b>启动失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」；保存时提示「<b>保存失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」。比如：启动失败，原因是：合约 BTCUSDT 币对已在 S-003 · BTC 冲击监控 运营中。</li>
+                  <li><span class="spec-term">币对被占了报什么错</span>：启用和保存时的报错文案一样，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>。格式是：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控。</li>
                   <li><span class="spec-term">白名单和黑名单撞了怎么办</span>：以黑名单为准。一个账户如果同时在白名单和黑名单里，它的成交整笔剔除，不参与统计。</li>
-                  <li><span class="spec-term">启用前检查什么</span>：先查这个币对有没有被别的监控占着。占着了就报错，状态不变，也不写启用时间。</li>
+                  <li><span class="spec-term">启用前检查什么</span>：先查这个币对有没有被别的监控占着。占着了就报错，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>，状态不变，也不写启用时间。</li>
                   <li><span class="spec-term">成交额怎么统计</span>：先把黑名单里的账户成交全部剔掉，再只统计白名单里账户的成交，最后按买入/卖出方向分别加总。</li>
                 </ol>
               </div><div class="spec-card">
@@ -2729,7 +2747,7 @@
                   <li><span class="spec-term">币对标签长什么样</span>：现货显示成「现货 BTCUSDT」（蓝色），合约显示成「合约 BTCUSDT」（橙色），左边带一个颜色圆点。</li>
                   <li><span class="spec-term">重复和删除</span>：同一个市场的同一个币对不能重复加。点标签右边的 × 直接删掉，还可以点「清空全部」一键删光。</li>
                   <li><span class="spec-term">怎么算被占用</span>：只要有一条监控正在运行、且用了这个币对，这个币对就算被占用了。占用的判断维度是「市场 + 币对」。</li>
-                  <li><span class="spec-term">启用时币对被占了</span>：弹红条提示「启动失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中」，和监控列表点启用报的错一样。</li>
+                  <li><span class="spec-term">启用时币对被占了</span>：弹红条提示，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>，和监控列表点启用报的错一样。格式：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控。</li>
                 </ol>
               </div>
 
@@ -2738,11 +2756,11 @@
                 <ol>
                   <li><span class="spec-term">什么算冲突</span>：同一个市场的同一个币对，同一时间只能被一条监控占用。不同市场不算冲突，比如「现货 BTCUSDT」和「合约 BTCUSDT」可以同时跑。</li>
                   <li><span class="spec-term">怎么判断被占用</span>：只要有一条监控正在运行、且用了这个币对，这个币对就算被占用了。</li>
-                  <li><span class="spec-term">冲突时提示什么</span>：启用时弹「<b>启动失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」；保存时弹「<b>保存失败，原因是：{市场} {币对}币对已在{监控编号 · 监控名}运营中</b>」。比如：启动失败，原因是：合约 BTCUSDT 币对已在 S-003 · BTC 冲击监控 运营中。</li>
+                  <li><span class="spec-term">冲突时提示什么</span>：启用和保存时的报错文案一样，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>。格式：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控。</li>
                   <li><span class="spec-term">提示长什么样</span>：红色提示条，在页面顶部中间，过一会自动消失。同一个错误不会连弹好几次。</li>
                   <li><span class="spec-term">启用时冲突了怎么办</span>：状态不变，不写启用时间，不发通知。</li>
                   <li><span class="spec-term">停用冲突吗</span>：停用不检查，直接释放币对占用，别的监控之后可以用这个币对。</li>
-                  <li><span class="spec-term">保存时选了启用</span>：保存前先检查币对有没有被占。占了就不保存、不关闭页面，弹红条提示保存失败的原因。</li>
+                  <li><span class="spec-term">保存时选了启用</span>：保存前先检查币对有没有被占。占了就不保存、不关闭页面，弹红条提示，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>。</li>
                 </ol>
               </div>
 
@@ -2791,6 +2809,7 @@
                   <li>结果详情弹窗按接收人分组：飞书群编号和邮箱号各自分组卡片，每个接收人下展示每次发送记录（第N次 + 状态 + 发送时间），失败几次就有几条记录。</li>
                   <li>口径定义同步更新：specCFG 新增「交易类型」条目，specLIST 新增「买入 / 卖出阈值列」条目，specHIS 新增「点方向列」条目并删除「怎么判定触发」（避免和监控列表页重复）。</li>
                   <li>配置表单·新增「7. 启用/停用配置」：两个单选项「启用（运行中）」和「停用（待启用）」，默认两个都不选（留空表示不指定）。右侧有实时提示文字显示当前选择状态。specCFG 同步新增该条目说明。</li>
+                  <li>报错提示语统一所见即所得：所有报错提示语改为直接展示红条上的实际文字，不再用占位符描述。币对占用互斥的报错统一为「{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控」（如「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」），启用和保存时文案一致。必填字段缺失报错为「请填写必填字段：{字段名}」。JS 的 formatOccupiedError 函数和保存校验逻辑同步更新。</li>
                 </ul>
               </div>
             </div>
@@ -3521,7 +3540,7 @@
         const runningMap = {};
         runningRows.forEach(r => {
           const m = r.getAttribute('data-market'); const p = r.getAttribute('data-pair');
-          if (m && p) runningMap[m + '|' + p] = r.getAttribute('data-strat-id') + ' · ' + r.getAttribute('data-name');
+          if (m && p) runningMap[m + '|' + p] = { id: r.getAttribute('data-strat-id'), name: r.getAttribute('data-name') };
         });
         const pairList = document.querySelectorAll('#cfgPairChips .chip');
         for (let i = 0; i < pairList.length; i++) {
@@ -3529,7 +3548,7 @@
           const m = chip.getAttribute('data-market'); const p = chip.getAttribute('data-pair');
           const key = m + '|' + p;
           if (runningMap[key]) {
-            const msg = m + ' ' + p + ' 币对已在 ' + runningMap[key] + ' 运营中';
+            const msg = (m + p) + '已在监控名：' + runningMap[key].name + '，监控编号' + runningMap[key].id + '中已被监控';
             if (typeof showToast === 'function') showToast(msg, 'warn');
             return;
           }
@@ -3722,12 +3741,13 @@
         }
         return null;
       }
-      // 冲突报错文案固定：「XXX币对已在YYY监控运营中」，其中 XXX=市场+币对；YYY=监控名（含监控编号）
+      // 冲突报错文案固定：「{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控」
       function formatOccupiedError(info){
         if (!info) return '';
-        const pairLabel = info.pairMarket;
-        const strat = info.strategyName || '当前运行中监控';
-        return pairLabel + '币对已在' + strat + '运营中';
+        const pairLabel = (info.pairMarket || '').replace(/\s+/g, '');
+        const stratName = info.strategyName || '当前运行中监控';
+        const stratId = info.strategyId || '';
+        return pairLabel + '已在监控名：' + stratName + '，监控编号' + stratId + '中已被监控';
       }
       function showToast(msg, variant){
         // 存在才写，避免 null
@@ -3815,7 +3835,7 @@
           ev.preventDefault();
           ev.stopPropagation();
           if (action === 'enable'){
-            // 口径：点「启用」前必须校验：若该 (市场,币对) 已存在运行中监控占用 → 直接报错『XXX币对已在YYY监控运营中』
+            // 口径：点「启用」前必须校验：若该 (市场,币对) 已存在运行中监控占用 → 直接报错『{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控』
             const info = findOccupiedRunningStrategy(pair, market);
             if (info){
               showToast(formatOccupiedError(info), 'error');
@@ -4396,7 +4416,7 @@
       // ======= 弹窗：保存按钮 =======
       const saveStratBtn = document.querySelector('.modalSaveStrategy');
       if (saveStratBtn) saveStratBtn.addEventListener('click', () => {
-        // 新建监控：若 (市场,币对) 已运行中占用 → 必报错『XXX币对已在YYY监控运营中』，不保存；否则演示新增一条
+        // 新建监控：若 (市场,币对) 已运行中占用 → 必报错『{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控』，不保存；否则演示新增一条
         const getRadioVal = (root, name) => { const r = root.querySelector('input[name="'+name+'"]:checked'); return r ? (r.value || '') : ''; };
         const root = document.getElementById('modalCreateStrategy');
         const market = getRadioVal(root,'csMarket');
@@ -4482,7 +4502,7 @@
       });
       const saveSymBtn = document.querySelector('.modalSaveSymbol');
       if (saveSymBtn) saveSymBtn.addEventListener('click', () => {
-        // 添加币对：若 (市场,币对) 已运行中占用 → 必报错『XXX币对已在YYY监控运营中』；否则演示加入监控币对表
+        // 添加币对：若 (市场,币对) 已运行中占用 → 必报错『{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控』；否则演示加入监控币对表
         const market = (()=>{const d=document.getElementById('addSymbolMarketDisp'); return (d && d.textContent && d.textContent.indexOf('合约')>=0) ? '合约' : '现货';})();
         const codeEl = document.getElementById('addSymbolCode');
         const pureSymbol = (codeEl && codeEl.value ? codeEl.value.toString().toUpperCase().replace(/\s+/g,'') : 'XRPUSDT') || 'XRPUSDT';
