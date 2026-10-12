@@ -1904,13 +1904,6 @@
                   
                 </div>
               </button>
-              <button class="navBtn" id="btnSpecDrawer" data-action="toggle-spec-drawer" data-title="口径定义（右侧抽屉）">
-                <div class="navIcon">口径</div>
-                <div class="navText">
-                  <strong>口径 · 定义与版本</strong>
-                  
-                </div>
-              </button>
             </div>
           </div>
 
@@ -2112,7 +2105,7 @@
               </div>
             </div>
 
-            <!-- 1. 监控币对：两个下拉 + 标签展示；现货名加"现货"、合约名加"合约"（统计时间间隔独立成块，不再与币对配置混放） -->
+            <!-- 1. 监控币对：先选市场类型（现货/合约），再选币对；选中后标签展示；现货名加"现货"、合约名加"合约"（统计时间间隔独立成块，不再与币对配置混放） -->
             <div style="border-radius:18px;border:1px solid var(--line);padding:18px 20px;background:rgba(255,255,255,.015);margin-bottom:22px;">
               <div class="sectionHead" style="margin-bottom:14px;">
                 <div>
@@ -2122,28 +2115,33 @@
               </div>
 
               <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin:2px 0 8px;">
-                <div class="field" style="flex:1 1 240px;margin-bottom:0;">
-                  <div class="label"><span>添加：现货币对</span><span class="hint">选择后自动加入下方标签区</span></div>
-                  <select class="select" id="cfgSpotSelect">
-                    <option value="">现货：请选择币对</option>
-                    <option value="AMAXUSDT" data-market="现货">AMAXUSDT 现货</option>
-                    <option value="ETHUSDT"  data-market="现货">ETHUSDT 现货</option>
-                    <option value="BTCUSDT"  data-market="现货">BTCUSDT 现货</option>
-                    <option value="SOLUSDT"  data-market="现货">SOLUSDT 现货</option>
-                    <option value="XRPUSDT"  data-market="现货">XRPUSDT 现货</option>
-                    <option value="DOGEUSDT" data-market="现货">DOGEUSDT 现货</option>
+                <div class="field" style="flex:0 0 auto;margin-bottom:0;">
+                  <div class="label"><span>市场类型 <span class="req">*</span></span><span class="hint">先选现货还是合约</span></div>
+                  <select class="select" id="cfgMarketType" style="width:140px;" onchange="(function(){var m=document.getElementById('cfgMarketType').value;var s=document.getElementById('cfgSpotSelect');var f=document.getElementById('cfgFutSelect');if(m==='现货'){s.style.display='';s.selectedIndex=0;f.style.display='none';}else if(m==='合约'){f.style.display='';f.selectedIndex=0;s.style.display='none';}else{s.style.display='none';f.style.display='none';}})();">
+                    <option value="">请选择</option>
+                    <option value="现货">现货</option>
+                    <option value="合约">合约</option>
                   </select>
                 </div>
                 <div class="field" style="flex:1 1 240px;margin-bottom:0;">
-                  <div class="label"><span>添加：合约币对</span><span class="hint">选择后自动加入下方标签区</span></div>
-                  <select class="select" id="cfgFutSelect">
+                  <div class="label"><span>选择币对</span><span class="hint">选择后自动加入下方标签区</span></div>
+                  <select class="select" id="cfgSpotSelect" style="display:none;">
+                    <option value="">现货：请选择币对</option>
+                    <option value="AMAXUSDT" data-market="现货">AMAXUSDT</option>
+                    <option value="ETHUSDT"  data-market="现货">ETHUSDT</option>
+                    <option value="BTCUSDT"  data-market="现货">BTCUSDT</option>
+                    <option value="SOLUSDT"  data-market="现货">SOLUSDT</option>
+                    <option value="XRPUSDT"  data-market="现货">XRPUSDT</option>
+                    <option value="DOGEUSDT" data-market="现货">DOGEUSDT</option>
+                  </select>
+                  <select class="select" id="cfgFutSelect" style="display:none;">
                     <option value="">合约：请选择币对</option>
-                    <option value="AMAXUSDT" data-market="合约">AMAXUSDT 合约</option>
-                    <option value="ETHUSDT"  data-market="合约">ETHUSDT 合约</option>
-                    <option value="BTCUSDT"  data-market="合约">BTCUSDT 合约</option>
-                    <option value="SOLUSDT"  data-market="合约">SOLUSDT 合约</option>
-                    <option value="XRPUSDT"  data-market="合约">XRPUSDT 合约</option>
-                    <option value="DOGEUSDT" data-market="合约">DOGEUSDT 合约</option>
+                    <option value="AMAXUSDT" data-market="合约">AMAXUSDT</option>
+                    <option value="ETHUSDT"  data-market="合约">ETHUSDT</option>
+                    <option value="BTCUSDT"  data-market="合约">BTCUSDT</option>
+                    <option value="SOLUSDT"  data-market="合约">SOLUSDT</option>
+                    <option value="XRPUSDT"  data-market="合约">XRPUSDT</option>
+                    <option value="DOGEUSDT" data-market="合约">DOGEUSDT</option>
                   </select>
                 </div>
                 <div style="margin-left:auto;">
@@ -2737,7 +2735,7 @@
               </div><div class="spec-card">
                 <strong>监控币对口径定义</strong>
                 <ol>
-                  <li><span class="spec-term">怎么加币对</span>：配置表单页「监控币对」区块顶部有两个下拉，一个选现货币对、一个选合约币对。选中后自动生成一个币对标签。</li>
+                  <li><span class="spec-term">怎么加币对</span>：分两步选。<b>第一步</b>，先在「市场类型」下拉里选现货还是合约；<b>第二步</b>，选完市场类型后，右边的「选择币对」下拉会自动变成对应的现货或合约币对列表，选一个币对就自动生成一个标签。两个步骤必须按顺序来，不选市场类型就看不到币对列表。</li>
                   <li><span class="spec-term">币对标签长什么样</span>：现货显示成「现货 BTCUSDT」（蓝色），合约显示成「合约 BTCUSDT」（橙色），左边带一个颜色圆点。</li>
                   <li><span class="spec-term">重复和删除</span>：同一个市场的同一个币对不能重复加。点标签右边的 × 直接删掉，还可以点「清空全部」一键删光。</li>
                   <li><span class="spec-term">怎么算被占用</span>：只要有一条监控正在运行、且用了这个币对，这个币对就算被占用了。占用的判断维度是「市场 + 币对」。</li>
@@ -2805,6 +2803,7 @@
                   <li>配置表单·新增「7. 启用/停用配置」：两个单选项「启用（运行中）」和「停用（待启用）」，默认两个都不选（留空表示不指定）。右侧有实时提示文字显示当前选择状态。specCFG 同步新增该条目说明。</li>
                   <li>报错提示语统一所见即所得：所有报错提示语改为直接展示红条上的实际文字，不再用占位符描述。币对占用互斥的报错统一为「{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控」（如「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」），启用和保存时文案一致。必填字段缺失报错为「请填写必填字段：{字段名}」。JS 的 formatOccupiedError 函数和保存校验逻辑同步更新。</li>
                   <li>统计时间间隔算法改为固定时间窗口：从原来的「滑动窗口」（每来一笔成交就以该成交为结束时间往前推 N 分钟）改为「固定时间窗口」。窗口长度 = 配置的 N 分钟；第一个窗口开始 = 监控初始化时间（启用时间），结束 = 初始化时间 + N 分钟；后续窗口开始 = 上一窗口结束 + 0.001 毫秒，结束 = 开始 + N 分钟。窗口首尾相接、不重叠。specLIST/specCFG/全局口径三处同步更新，「最新统计时间」改为当前窗口的结束时间。</li>
+                  <li>监控币对选择改为两步：从原来的「现货币对」和「合约币对」两个并列下拉框，改为先选「市场类型」（现货/合约），再根据选的市场类型显示对应的币对下拉。cfgSpotSelect 和 cfgFutSelect 两个 id 保留在 DOM 中，通过 display 控制显示。监控币对口径定义同步更新。</li>
                 </ul>
               </div>
             </div>
