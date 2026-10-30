@@ -1656,12 +1656,14 @@
 .chip.g{border-color:rgba(46,211,161,.28);background:rgba(46,211,161,.12);color:#dff8ef}
 .chip.o{border-color:rgba(255,145,77,.26);background:rgba(255,145,77,.12);color:#ffd8bc}
 .chip.r{border-color:rgba(255,93,108,.26);background:rgba(255,93,108,.12);color:#ffd3d3}
+.chip.muted{border-color:rgba(148,163,184,.24);background:rgba(148,163,184,.10);color:#d8e4f2}
 .chip.spotChip{border-color:var(--mkt-spot-bd);background:rgba(94,178,255,.14);color:#d5e6ff;font-weight:600;padding:8px 12px 8px 14px;font-size:12.5px}
 .chip.futChip{border-color:var(--mkt-fut-bd);background:rgba(255,145,77,.13);color:#ffe1c2;font-weight:600;padding:8px 12px 8px 14px;font-size:12.5px}
 .chip.spotChip::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mkt-spot);margin-right:4px;box-shadow:0 0 0 3px rgba(94,178,255,.18)}
 .chip.futChip::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mkt-fut);margin-right:4px;box-shadow:0 0 0 3px rgba(255,145,77,.18)}
 .chip .x{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;cursor:pointer;background:rgba(0,0,0,.2);font-size:11px;line-height:1;color:#cfe0ff}
 .chipList .input{flex:1;min-width:160px;border:none;background:transparent;min-height:30px;padding:0 4px}
+.field-note{margin:10px 2px 0;color:#8ea4c1;font-size:12.5px;line-height:1.8}
 
 .mktBadge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid rgba(148,163,184,.14);letter-spacing:.04em}
 .mktBadge.spot{background:var(--mkt-spot-bg);color:#bad8ff;border-color:var(--mkt-spot-bd)}
@@ -2283,6 +2285,19 @@
                   <input class="input" placeholder="仅输入纯编号，回车添加" />
                 </div>
               </div>
+              <div class="field full" style="margin-top:14px;">
+                <div class="label">
+                  <span>系统做市账号</span>
+                  <span class="hint">只读</span>
+                </div>
+                <div class="chipList" style="opacity:.88;">
+                  <span class="chip muted">70012001</span>
+                  <span class="chip muted">70012018</span>
+                  <span class="chip muted">70012035</span>
+                  <span class="chip muted">70012066</span>
+                </div>
+                <p class="field-note">此处展示的是系统内部做市账号。监控账号如果与这些账号成交，会被视为内部成交，不计入统计交易额。做市账号也可以添加为监控账户 UID。</p>
+              </div>
             </div>
 
             <!-- 6. 通知渠道 -->
@@ -2628,8 +2643,9 @@
         <b>买入和卖出各算各的</b>，互不影响。</li>
       <li><span class="spec-term">统计时间间隔怎么填</span>：只能填整数分钟，不能填小数、不能填负数。输入时字母和符号会自动被清掉。如果填 0 或空着就回车，会清空并提示「统计时间请输入 ≥1 的整数分钟」。</li>
       <li><span class="spec-term">买入阈值 / 卖出阈值</span>：买入和卖出各有一个「交易类型」下拉框，决定统计哪种成交：全部交易、主动买入/卖出（默认）、被动买入/卖出。主动买入就是买方主动吃掉卖方挂的单；被动买入就是买方挂单被卖方主动吃掉；主动/被动卖出同理。选「全部交易」就是同方向的主动和被动都加在一起。当所选交易类型的累计成交额达到这个方向填的阈值，就触发这个方向的告警。买入和卖出各有各的阈值和交易类型，各自独立触发。</li>
-      <li><span class="spec-term">监控账号 UID 怎么填</span>：只能填数字，填字母会被自动清掉。按回车添加一个 UID。如果这个 UID 已经加过了，不会重复加，并提示「该 UID 已存在」。空着回车不会添加。<b>只统计监控账号 UID 参与的、且成交对象既不是监控账号 UID 也不是排除账户 UID 的成交金额</b>。监控账号 UID 自己和自己成交、以及和排除账户 UID 的成交，都不统计。</li>
+      <li><span class="spec-term">监控账号 UID 怎么填</span>：只能填数字，填字母会被自动清掉。按回车添加一个 UID。如果这个 UID 已经加过了，不会重复加，并提示「该 UID 已存在」。空着回车不会添加。<b>只统计监控账号 UID 参与的、且成交对象既不是监控账号 UID、也不是排除账户 UID、也不是系统做市账号的成交金额</b>。监控账号 UID 自己和自己成交、以及和排除账户 UID 或系统做市账号的成交，都不统计。</li>
       <li><span class="spec-term">排除账户 UID 怎么填</span>：和监控账号一样，只能填数字，回车添加。被加在这里的账户，和监控账号 UID 之间的成交不参与统计。</li>
+      <li><span class="spec-term">系统做市账号怎么看</span>：这一栏是只读展示，不能新增、删除或编辑。这里列出来的是系统内部做市账号。监控账号如果和这些账号成交，会被视为内部成交，不计入统计交易额。做市账号也可以添加为监控账户 UID。</li>
       <li><span class="spec-term">飞书接收群怎么填</span>：只能填群编号或者通知链接。如果填了带空格的内容或者中文群名，不会添加，并提示「请输入群编号或通知链接，不支持群名」。</li>
       <li><span class="spec-term">邮件收件人怎么填</span>：必须是合法的邮箱格式，格式不对不会添加，并提示「请输入正确的邮箱地址」。同一个邮箱不会重复添加。</li>
       <li><span class="spec-term">币对从哪来</span>：「选择币对」下拉里的选项，是<b>当前平台上架中的币对</b>。平台上下架了的币对不会出现在列表里，也不能被选。如果某个币对在列表里看不到，说明它已经被平台下架了。</li>
@@ -2693,8 +2709,9 @@
                   <li><span class="spec-term">交易类型</span>：买入和卖出各有一个「交易类型」下拉框，用来决定统计哪种成交。买入方向可选：全部交易、主动买入（默认）、被动买入；卖出方向可选：全部交易、主动卖出（默认）、被动卖出。主动买入就是买方主动吃掉卖方挂的单；被动买入就是买方挂单被卖方主动吃掉；主动/被动卖出同理。选「全部交易」就是同方向的主动和被动都加在一起统计。</li>
                   <li><span class="spec-term">买入阈值</span>：按上面选的交易类型，把买入方向的累计成交额加起来，达到这个数就触发告警。成交额 = 成交价格 × 成交数量，单位是 USDT。</li>
                   <li><span class="spec-term">卖出阈值</span>：按上面选的交易类型，把卖出方向的累计成交额加起来，达到这个数就触发告警。成交额 = 成交价格 × 成交数量，单位是 USDT。</li>
-                  <li><span class="spec-term">监控账号</span>：只有监控账号 UID 参与的成交才会被统计，且成交对象（对手方）既不能是监控账号 UID，也不能是排除账户 UID。监控账号 UID 自己和自己成交、以及和排除账户 UID 的成交，都不统计。</li>
+                  <li><span class="spec-term">监控账号</span>：只有监控账号 UID 参与的成交才会被统计，且成交对象（对手方）既不能是监控账号 UID，也不能是排除账户 UID，还不能是系统做市账号。监控账号 UID 自己和自己成交、以及和排除账户 UID 或系统做市账号的成交，都不统计。</li>
                   <li><span class="spec-term">排除账户</span>：被加在这里的账户，和监控账号 UID 之间的成交不参与统计。</li>
+                  <li><span class="spec-term">系统做市账号</span>：这是一组系统内部做市账号，只展示、不允许编辑。监控账号如果和这些账号成交，会被视为内部成交，不计入统计交易额。做市账号也可以添加为监控账户 UID。</li>
                   <li><span class="spec-term">飞书接收群</span>：告警触发后往这些飞书群发通知。可以填群编号或者通知链接。发送失败会自动重试 2 次。</li>
                   <li><span class="spec-term">邮件收件人</span>：告警触发后往这些邮箱发邮件。邮箱格式不对的不会保存，重复的邮箱会自动去掉。邮件的标题和正文和飞书发的完全一样。</li>
                   <li><span class="spec-term">触发记录</span>：专门用来展示历史告警的页面。每条记录包含：市场、币对、监控编号、监控名、触发时间、方向、累计成交额、阈值、统计时间间隔、飞书发送结果、邮件发送结果、最终结果。</li>
@@ -2713,6 +2730,7 @@
                 <ol>
                   <li><span class="spec-term">监控账号 UID 怎么加</span>：只能填数字，字母和符号会被自动清掉。按回车添加。空着回车不加。已经加过的 UID 不会重复加，并提示「该 UID 已存在」。</li>
                   <li><span class="spec-term">排除账户 UID 怎么加</span>：和监控账号一样，只能填数字，回车添加。</li>
+                  <li><span class="spec-term">系统做市账号怎么展示</span>：固定展示在排除账户下面，只读，不提供新增、删除或编辑入口。</li>
                   <li><span class="spec-term">飞书接收群怎么加</span>：只能填群编号或者通知链接。填了带空格的内容或中文群名不会添加，并提示「请输入群编号或通知链接，不支持群名」。</li>
                   <li><span class="spec-term">邮件收件人怎么加</span>：必须是合法的邮箱地址，格式不对不加，并提示「请输入正确的邮箱地址」。</li>
                   <li><span class="spec-term">币对标签长什么样</span>：选了现货币对就显示「现货 BTCUSDT」，选了合约就显示「合约 BTCUSDT」。现货是蓝色，合约是橙色。</li>
@@ -2728,7 +2746,7 @@
                   <li><span class="spec-term">统计时间间隔怎么填</span>：只能填整数分钟，不能切换成小时或天。所有需要填统计时间的地方都一样。填 0 或空着回车，会清空并提示「统计时间请输入 ≥1 的整数分钟」。</li>
                   <li><span class="spec-term">报错提示长什么样</span>：红色的提示条，出现在页面顶部中间，过一会自动消失。同一个错误不会连弹好几次。</li>
                   <li><span class="spec-term">币对被占了报什么错</span>：启用和保存时的报错文案一样，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>。格式是：{市场}{币对}已在监控名：{监控名}，监控编号{监控编号}中已被监控。</li>
-                  <li><span class="spec-term">成交怎么过滤</span>：只有监控账号 UID 参与的成交才会被统计，且成交对象（对手方）既不能是监控账号 UID，也不能是排除账户 UID。监控账号 UID 自己和自己成交、以及和排除账户 UID 的成交，都不统计。最后按买入/卖出方向分别加总。</li>
+                  <li><span class="spec-term">成交怎么过滤</span>：只有监控账号 UID 参与的成交才会被统计，且成交对象（对手方）既不能是监控账号 UID，也不能是排除账户 UID，还不能是系统做市账号。监控账号 UID 自己和自己成交、以及和排除账户 UID 或系统做市账号的成交，都不统计。最后按买入/卖出方向分别加总。</li>
                   <li><span class="spec-term">启用前检查什么</span>：先查这个币对有没有被别的监控占着。占着了就报错，红条上显示：<b>「合约BTCUSDT已在监控名：BTC 冲击监控，监控编号S-003中已被监控」</b>，状态不变，也不写启用时间。</li>
                 </ol>
               </div><div class="spec-card">
@@ -2770,16 +2788,18 @@
             <h4 style="margin-top:18px;">版本声明（日志式 · 自然日最终状态）</h4>
             <div class="verPanel" data-version-block="v20261030">
               <div class="verTitle">
-                <strong>v20261030 · 通知模板补齐监控UID成交金额（最终状态）</strong>
+                <strong>v20261030 · 通知模板补齐成交金额 + 配置页新增系统做市账号只读字段（最终状态）</strong>
                 <div class="chips">
                   <span class="口径标签 warn">通知模板示例补齐金额</span>
                   <span class="口径标签 warn">模板原文变量补齐金额</span>
+                  <span class="口径标签 warn">系统做市账号只读展示</span>
                   <span class="口径标签 silver">口径与版本同步更新</span>
                 </div>
               </div>
               <div class="verRow">
                 <label>生效范围</label>
                 <div class="chips">
+                  <span class="口径标签 warn">配置表单页·排除账户区</span>
                   <span class="口径标签 warn">通知模板页·飞书预览</span>
                   <span class="口径标签 warn">通知模板页·邮件预览</span>
                   <span class="口径标签 warn">模板原文</span>
@@ -2792,6 +2812,8 @@
                   <li>修改：通知模板页里「监控UID · 交易数量」示例值从只展示成交笔数，改为每个 UID 同时展示「成交笔数 + 成交金额」，示例格式统一为「1008654321（12 笔，52,438.20 USDT）」。</li>
                   <li>修改：模板原文占位变量同步补齐金额字段，改为「{监控UID}（{数量} 笔，{金额} USDT）」格式，飞书和邮件两种渠道保持一致。</li>
                   <li>修改：通知模板页口径、触发记录页的通知说明、全局通知模板规则三处描述同步更新，明确通知里每个监控 UID 都要展示对应的交易数量和成交金额。</li>
+                  <li>新增：配置表单页在「排除账户」下面增加「系统做市账号」只读字段，固定展示系统内部做市账号，不提供新增、删除或编辑入口。</li>
+                  <li>修改：配置页口径、全局字段口径、标签与输入规则、账户过滤规则四处同步更新，明确监控账号如果和系统做市账号成交，会被视为内部成交，不计入统计交易额；同时补充说明做市账号也可以添加为监控账户 UID。</li>
                 </ul>
               </div>
             </div>
