@@ -2407,7 +2407,7 @@
                     <tr><td>统计时间间隔</td><td>5 分钟</td></tr>
                     <tr><td>累计成交额</td><td>108,432.58 USDT</td></tr>
                     <tr><td>预警阈值</td><td>100,000.00 USDT</td></tr>
-                    <tr><td>监控UID · 交易数量</td><td style="font-family:var(--mono);line-height:1.9;">1008654321（12 笔）<br />1009876543（8 笔）<br />1007654321（5 笔）</td></tr>
+                    <tr><td>监控UID · 交易数量</td><td style="font-family:var(--mono);line-height:1.9;">1008654321（12 笔，52,438.20 USDT）<br />1009876543（8 笔，34,521.18 USDT）<br />1007654321（5 笔，21,473.20 USDT）</td></tr>
                   </table>
                   <div style="margin-top:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;line-height:1.9;">
                     该方向主动成交额已达到预警阈值，请关注当前盘口、成交情况及做市持仓。
@@ -2427,7 +2427,7 @@
                     <tr><td>统计时间间隔</td><td>5 分钟</td></tr>
                     <tr><td>累计成交额</td><td>108,432.58 USDT</td></tr>
                     <tr><td>预警阈值</td><td>100,000.00 USDT</td></tr>
-                    <tr><td>监控UID · 交易数量</td><td style="font-family:var(--mono);line-height:1.9;">1008654321（12 笔）<br />1009876543（8 笔）<br />1007654321（5 笔）</td></tr>
+                    <tr><td>监控UID · 交易数量</td><td style="font-family:var(--mono);line-height:1.9;">1008654321（12 笔，52,438.20 USDT）<br />1009876543（8 笔，34,521.18 USDT）<br />1007654321（5 笔，21,473.20 USDT）</td></tr>
                   </table>
                   <div style="margin-top:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;line-height:1.9;">
                     该方向主动成交额已达到预警阈值，请关注当前盘口、成交情况及做市持仓。
@@ -2449,7 +2449,7 @@
               统计时间间隔：{X} 分钟<br />
               累计成交额：{累计成交额} USDT<br />
               预警阈值：{阈值} USDT<br />
-              监控UID · 交易数量：{监控UID1}（{数量1} 笔）、{监控UID2}（{数量2} 笔）…<br />
+              监控UID · 交易数量：{监控UID1}（{数量1} 笔，{金额1} USDT）、{监控UID2}（{数量2} 笔，{金额2} USDT）…<br />
               结尾：该方向主动成交额已达到预警阈值，请关注当前盘口、成交情况及做市持仓。
             </div>
                       <div class="spec-card" id="specTPL" style="display:none;margin-top:18px;">
@@ -2457,7 +2457,7 @@
               <ol style="margin-top:8px;line-height:2;">
                 <li><b class="spec-term">模板覆盖</b>：飞书 消息卡片 + 邮件正文；两渠道文案结构/变量 100% 对齐。</li>
                 <li><b class="spec-term">固定标题</b>：<code>【主动吃单监控】{币对}｜{方向}</code>。</li>
-                <li><b class="spec-term">正文固定 7 行</b>：交易对 → 成交方向 → 统计区间（开始—结束北京时间） → 统计时间间隔（X 分钟） → 累计成交额 USDT → 预警阈值 USDT → 监控UID · 交易数量（每个监控账号 UID 及其在本统计区间内的成交笔数，方便直接查询）；结尾说明文字固定一句话。</li>
+                <li><b class="spec-term">正文固定 7 行</b>：交易对 → 成交方向 → 统计区间（开始—结束北京时间） → 统计时间间隔（X 分钟） → 累计成交额 USDT → 预警阈值 USDT → 监控UID · 交易数量（每个监控账号 UID 都要展示本统计区间内的成交笔数和对应成交金额，方便直接查询）；结尾说明文字固定一句话。</li>
                 <li><b class="spec-term">数值展示</b>：累计成交额、阈值 两位小数；时间统一 UTC+8。</li>
               </ol>
             </div>
@@ -2646,7 +2646,7 @@
       <li><span class="spec-term">筛选栏</span>：5 个筛选项，分别是监控编号、币对、方向、结果、触发时间。监控编号是搜索框，输入编号的一部分就能模糊匹配；其他筛选项留空表示不限制。同时选多个筛选项时，只显示同时满足所有条件的记录。改任一个筛选项，下面的列表立刻自动刷新，不需要点查询按钮。</li>
       <li><span class="spec-term">监控UID交易数</span>：这一栏显示的是，这次告警触发的统计时间段里，监控账号里那些账户作为吃单方一共成交了多少笔（同一笔成交只算一次）。数字至少是 1。点击「N 笔」会弹出「监控报警相关交易记录」窗口，里面列出每笔成交的监控ID、用户ID（对手）、订单ID、成交价格、数量、成交金额、交易时间。</li>
       <li><span class="spec-term">点方向列</span>：方向列显示「主动买入」或「主动卖出」，文字可点击。点击后弹出的「监控报警相关交易记录」窗口和点「N 笔」是同一个，列出触发这次告警的所有相关成交明细（监控ID、用户ID、订单ID、成交价格、数量、成交金额、交易时间）。方向列的颜色：主动买入是绿色，主动卖出是红色。成交金额 = 成交价格 × 数量，单位 USDT，用黄色高亮。</li>
-      <li><span class="spec-term">发什么通知</span>：飞书和邮件发的内容完全一样。标题固定是「【主动吃单监控】{币对}｜{方向}」。正文依次写：交易对、成交方向、统计区间、统计时间间隔、累计成交额、预警阈值、监控UID和对应的交易数量、最后一句提醒。</li>
+      <li><span class="spec-term">发什么通知</span>：飞书和邮件发的内容完全一样。标题固定是「【主动吃单监控】{币对}｜{方向}」。正文依次写：交易对、成交方向、统计区间、统计时间间隔、累计成交额、预警阈值、监控UID以及对应的交易数量和成交金额、最后一句提醒。</li>
       <li><span class="spec-term">结果列怎么算</span>：结果列是飞书和邮件两个渠道的综合结果。两个都成功 = 全部成功；有一个还在重试中、没有失败 = 进行中；只要有一个失败 = 部分失败。发送失败会自动重试 2 次。</li>
       <li><span class="spec-term">点结果列</span>：点击结果列的文字（全部成功 / 进行中 / 部分失败），会弹出一个详情窗口。窗口分左右两栏：飞书通知栏列出每个飞书群编号，邮件通知栏列出每个邮箱号。每个接收人下面列出每次发送的记录（第1次、第2次…）和对应的状态（成功 / 失败 / 重试中）以及发送时间。失败了几次就有几条记录。不去重，每次触发都会产生一条记录。</li>
     </ol>
@@ -2703,7 +2703,7 @@
                   <li><span class="spec-term">最新启用时间</span>：这条监控最近一次成功启用的时间。如果当前是待启用，或者从来没启用过，就显示 <b>--</b>。</li>
                   <li><span class="spec-term">成交额怎么算</span>：单笔成交额 = 成交价格 × 成交数量。统计区间内按方向分别加总。同一笔成交只算一次，不会重复累计。</li>
                   <li><span class="spec-term">怎么触发</span>：任一方向的累计成交额达到阈值就触发那个方向的告警。买入和卖出各触发各的，互不影响。每次达到阈值都会产生一条触发记录并发送通知，不去重。</li>
-                  <li><span class="spec-term">通知模板规则</span>：标题固定为「【主动吃单监控】{币对}｜{方向}」。正文依次写：交易对、成交方向、统计区间、统计时间间隔、累计成交额、预警阈值、监控UID和对应的交易数量、最后一句提醒。飞书和邮件的内容完全一样。</li>
+                  <li><span class="spec-term">通知模板规则</span>：标题固定为「【主动吃单监控】{币对}｜{方向}」。正文依次写：交易对、成交方向、统计区间、统计时间间隔、累计成交额、预警阈值、监控UID以及对应的交易数量和成交金额、最后一句提醒。飞书和邮件的内容完全一样。</li>
                 </ol>
               </div>
 
@@ -2768,6 +2768,33 @@
             </div>
 
             <h4 style="margin-top:18px;">版本声明（日志式 · 自然日最终状态）</h4>
+            <div class="verPanel" data-version-block="v20261030">
+              <div class="verTitle">
+                <strong>v20261030 · 通知模板补齐监控UID成交金额（最终状态）</strong>
+                <div class="chips">
+                  <span class="口径标签 warn">通知模板示例补齐金额</span>
+                  <span class="口径标签 warn">模板原文变量补齐金额</span>
+                  <span class="口径标签 silver">口径与版本同步更新</span>
+                </div>
+              </div>
+              <div class="verRow">
+                <label>生效范围</label>
+                <div class="chips">
+                  <span class="口径标签 warn">通知模板页·飞书预览</span>
+                  <span class="口径标签 warn">通知模板页·邮件预览</span>
+                  <span class="口径标签 warn">模板原文</span>
+                  <span class="口径标签 silver">页级口径与全局口径</span>
+                </div>
+              </div>
+              <div class="verRow">
+                <label>当前版本改动明细（v20261030）</label>
+                <ul>
+                  <li>修改：通知模板页里「监控UID · 交易数量」示例值从只展示成交笔数，改为每个 UID 同时展示「成交笔数 + 成交金额」，示例格式统一为「1008654321（12 笔，52,438.20 USDT）」。</li>
+                  <li>修改：模板原文占位变量同步补齐金额字段，改为「{监控UID}（{数量} 笔，{金额} USDT）」格式，飞书和邮件两种渠道保持一致。</li>
+                  <li>修改：通知模板页口径、触发记录页的通知说明、全局通知模板规则三处描述同步更新，明确通知里每个监控 UID 都要展示对应的交易数量和成交金额。</li>
+                </ul>
+              </div>
+            </div>
             <div class="verPanel" data-version-block="v20261011">
               <div class="verTitle">
                 <strong>v20261011 · 口径定义全局口语化 + 补齐筛选项（最终状态）</strong>
